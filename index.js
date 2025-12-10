@@ -1,3 +1,9 @@
+require('dotenv').config();
+
+const path = require('path');
+const express = require('express');
+const mysql = require('mysql2/promise');
+
 // ===== Імпорт стандартних модулів =====
 const fs = require('fs');
 const path = require('path');
@@ -55,6 +61,13 @@ function findItemById(id) {
 // ===== Налаштовуємо Express =====
 const app = express();
 
+const pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+});
 // Підтримка JSON та x-www-form-urlencoded
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -365,8 +378,20 @@ app.use((req, res) => {
 // ===== Створюємо HTTP-сервер через http =====
 const server = http.createServer(app);
 
-server.listen(PORT, HOST, () => {
-    console.log(`Server is running at http://${HOST}:${PORT}`);
-    console.log('Cache directory:', CACHE_DIR);
-    console.log('Swagger docs: http://' + HOST + ':' + PORT + '/docs');
-});
+async function start() {
+    try {
+        await pool.getConnection();
+        console.log('Connected to MariaDB');
+
+        const port = process.env.APP_PORT || 3000;
+
+        app.listen(port, () => {
+            console.log(`Server is running on port ${port}`);
+        });
+    } catch (err) {
+        console.error('Failed to connect to MariaDB', err);
+        process.exit(1);
+    }
+}
+
+start();
