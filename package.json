@@ -1,22 +1,22 @@
 {
   "name": "backend-course-2025-7",
   "version": "1.0.0",
-  "description": "Lab 7 - Inventory service",
+  "description": "Lab 7 - Inventory service with Docker and MariaDB",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "debug": "node --inspect index.js"
+    "start": "node index.js --host 127.0.0.1 --port 3000 --cache ./cache",
+    "dev": "nodemon index.js --host 0.0.0.0 --port 3000 --cache /cache",
+    "debug": "node --inspect=0.0.0.0:9229 index.js --host 0.0.0.0 --port 3000 --cache /cache"
   },
   "keywords": [],
   "author": "miaKravs",
   "license": "ISC",
   "dependencies": {
     "commander": "^14.0.2",
-    "dotenv": "^17.2.3",
+    "dotenv": "^16.4.5",
     "express": "^5.1.0",
+    "mariadb": "^3.4.5",
     "multer": "^2.0.2",
-    "mysql2": "^3.15.3",
     "superagent": "^10.2.3",
     "swagger-ui-express": "^5.0.1"
   },
