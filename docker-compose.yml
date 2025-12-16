@@ -13,7 +13,8 @@ services:
       - .:/app
       - ./cache:/cache
     working_dir: /app
-    command: ["npm", "run", "dev", "--", "--host=0.0.0.0", "--port=3000", "--cache=/cache"]
+    command: [ "node", "index.js", "--host=0.0.0.0", "--port=3000", "--cache=/cache" ]
+
     env_file:
       - .env
 
